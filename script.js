@@ -58,6 +58,57 @@ function GameController() {
             switchPlayer();
         }
         board.printBoard();
+
+        if (checkWin(board.getBoard()) === 1) {
+            console.log("win");
+        } else if (checkWin(board.getBoard()) === 0) {
+            console.log("draw");
+        }
+    };
+
+    // Win logic implementation
+    const checkWin = (board) => {
+        // check rows
+        for (let i = 0; i < 3; i++) {
+            const a = board[i][0];
+            const b = board[i][1];
+            const c = board[i][2];
+
+            if (a !== "" && a === b && b === c) return 1;
+        }
+
+        // check cols
+        for (let i = 0; i < 3; i++) {
+            const a = board[0][i];
+            const b = board[1][i];
+            const c = board[2][i];
+
+            if (a !== "" && a === b && b === c) return 1;
+        }
+
+        // check diagonal
+        const a = board[0][0];
+        const b = board[1][1];
+        const c = board[2][2];
+
+        if (a !== "" && a === b && b === c) return 1;
+
+        // check anti diagonal
+        const d = board[0][2];
+        const e = board[1][1];
+        const f = board[2][0];
+
+        if (d !== "" && d === e && e === f) return 1;
+
+        // check for draw
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                const cell = board[i][j];
+                if (cell === "") return;
+            }
+        }
+
+        return 0;
     };
 
     return { getActivePlayer, play };
