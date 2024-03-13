@@ -34,3 +34,18 @@ h6 {
 body {
     font-family: sans-serif;
 }
+
+/* Board style */
+.board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 300px;
+    width: 300px;
+}

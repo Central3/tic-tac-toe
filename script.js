@@ -111,7 +111,42 @@ function GameController() {
         return 0;
     };
 
-    return { getActivePlayer, play };
+    return { getActivePlayer, play, getBoard: board.getBoard };
 }
 
-let game = GameController();
+// Handle everything that happens in the interface
+(function UIController() {
+    // DOM queries here
+    const boardDiv = document.querySelector(".board");
+    const game = GameController();
+    
+    const updateScreen = () => {
+        const board = game.getBoard();
+        boardDiv.textContent = "";
+
+        board.forEach((row, rowIndex) => {
+            row.forEach((col, colIndex) => {
+                const btn = document.createElement("button");
+                btn.dataset.row = rowIndex;
+                btn.dataset.col = colIndex;
+                btn.textContent = col;
+                boardDiv.appendChild(btn);
+            });
+        });
+    };
+
+    function handleClick(event) {
+        if (event.target.nodeName === "BUTTON") {
+            const cellRow = event.target.dataset.row;
+            const cellCol = event.target.dataset.col;
+
+            game.play(cellRow, cellCol);
+        }
+
+        updateScreen();
+    }
+
+    boardDiv.addEventListener("click", handleClick);
+
+    updateScreen();
+})();
