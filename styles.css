@@ -34,6 +34,7 @@ h6 {
 body {
     font-family: sans-serif;
     color: #4ade80;
+    background-color: #d9f99d;
 }
 
 /* font style */
@@ -47,11 +48,6 @@ body {
         /* Modern browsers */
         url('transfonter.org-20240313-110525/PinmoldDEMO.ttf') format('truetype'),
         /* Safari, Android, iOS */
-}
-
-body {
-    font-family: Pinmold;
-    background-color: #d9f99d;
 }
 
 /* Board style */
@@ -70,7 +66,7 @@ body {
 }
 
 /* other styles */
-.start-btn {
+.restart-btn {
     background-color: #4ade80;
     padding: 4px 32px;
     font-size: 1.2rem;
@@ -81,7 +77,7 @@ body {
     color: #fff;
 }
 
-.start-btn:hover {
+.restart-btn:hover {
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 

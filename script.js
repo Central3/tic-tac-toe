@@ -54,13 +54,19 @@ function GameController() {
         (activePlayer = activePlayer === player1 ? player2 : player1);
 
     const play = (row, col) => {
-        if (board.markCell(row, col, activePlayer.marker) != -1) {
-            switchPlayer();
+        const winStatus = checkWin(board.getBoard());
+
+        if (winStatus !== 1 && winStatus !== 2 && winStatus !== 0) {
+            if (board.markCell(row, col, activePlayer.marker) != -1) {
+                switchPlayer();
+            }
         }
 
-        if (checkWin(board.getBoard()) === 1) {
-            console.log("win");
-        } else if (checkWin(board.getBoard()) === 0) {
+        if (winStatus === 1) {
+            console.log("Player 1 wins");
+        } else if (winStatus === 2) {
+            console.log("Player 2 wins");
+        } else if (winStatus === 0) {
             console.log("draw");
         }
     };
@@ -73,7 +79,10 @@ function GameController() {
             const b = board[i][1];
             const c = board[i][2];
 
-            if (a !== "" && a === b && b === c) return 1;
+            if (a !== "" && a === b && b === c) {
+                if (a === "X") return 1;
+                if (a === "O") return 2;
+            }
         }
 
         // check cols
@@ -82,7 +91,10 @@ function GameController() {
             const b = board[1][i];
             const c = board[2][i];
 
-            if (a !== "" && a === b && b === c) return 1;
+            if (a !== "" && a === b && b === c) {
+                if (a === "X") return 1;
+                if (a === "O") return 2;
+            }
         }
 
         // check diagonal
@@ -90,14 +102,20 @@ function GameController() {
         const b = board[1][1];
         const c = board[2][2];
 
-        if (a !== "" && a === b && b === c) return 1;
+        if (a !== "" && a === b && b === c) {
+            if (a === "X") return 1;
+            if (a === "O") return 2;
+        }
 
         // check anti diagonal
         const d = board[0][2];
         const e = board[1][1];
         const f = board[2][0];
 
-        if (d !== "" && d === e && e === f) return 1;
+        if (d !== "" && d === e && e === f) {
+            if (d === "X") return 1;
+            if (d === "O") return 2;
+        }
 
         // check for draw
         for (let i = 0; i < 3; i++) {
@@ -110,24 +128,31 @@ function GameController() {
         return 0;
     };
 
-    return { getActivePlayer, play, getBoard: board.getBoard };
+    return { getActivePlayer, play, getBoard: board.getBoard, checkWin };
 }
 
 // Handle everything that happens in the interface
 (function UIController() {
     // DOM queries here
     const boardDiv = document.querySelector(".board");
-    const displayTurn = document.querySelector(".display-result");
-    const startBtn = document.querySelector(".start-btn");
+    const dispalyResult = document.querySelector(".display-result");
+    const restartBtn = document.querySelector(".restart-btn");
 
     const game = GameController();
 
     const updateScreen = () => {
         const board = game.getBoard();
+        let winStatus = "";
         boardDiv.textContent = "";
 
         const activePlayer = game.getActivePlayer();
-        displayTurn.textContent = `${activePlayer.name}'s turn`;
+
+        if (game.checkWin(board) === 1) winStatus = "Player 1 won";
+        else if (game.checkWin(board) === 2) winStatus = "Player 2 won";
+        else if (game.checkWin(board) === 0) winStatus = "It's a draw";
+        else winStatus = `${activePlayer.name}'s turn`;
+
+        dispalyResult.textContent = winStatus;
 
         board.forEach((row, rowIndex) => {
             row.forEach((col, colIndex) => {
@@ -141,7 +166,7 @@ function GameController() {
         });
     };
 
-    function handleClick(event) {
+    function handleBoardClick(event) {
         if (event.target.nodeName === "BUTTON") {
             const cellRow = event.target.dataset.row;
             const cellCol = event.target.dataset.col;
@@ -152,7 +177,12 @@ function GameController() {
         updateScreen();
     }
 
-    boardDiv.addEventListener("click", handleClick);
+    function handleRestartClick() {
+        location.reload();
+    }
+
+    boardDiv.addEventListener("click", handleBoardClick);
+    restartBtn.addEventListener("click", handleRestartClick);
 
     updateScreen();
 })();
