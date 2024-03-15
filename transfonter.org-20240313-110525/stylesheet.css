@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Pinmold DEMO';
+    src: url('PinmoldDEMO.eot');
+    src: url('PinmoldDEMO.eot?#iefix') format('embedded-opentype'),
+        url('PinmoldDEMO.woff2') format('woff2'),
+        url('PinmoldDEMO.woff') format('woff'),
+        url('PinmoldDEMO.ttf') format('truetype'),
+        url('PinmoldDEMO.svg#PinmoldDEMO') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

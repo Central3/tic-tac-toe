@@ -57,7 +57,6 @@ function GameController() {
         if (board.markCell(row, col, activePlayer.marker) != -1) {
             switchPlayer();
         }
-        board.printBoard();
 
         if (checkWin(board.getBoard()) === 1) {
             console.log("win");
@@ -118,15 +117,22 @@ function GameController() {
 (function UIController() {
     // DOM queries here
     const boardDiv = document.querySelector(".board");
+    const displayTurn = document.querySelector(".display-result");
+    const startBtn = document.querySelector(".start-btn");
+
     const game = GameController();
-    
+
     const updateScreen = () => {
         const board = game.getBoard();
         boardDiv.textContent = "";
 
+        const activePlayer = game.getActivePlayer();
+        displayTurn.textContent = `${activePlayer.name}'s turn`;
+
         board.forEach((row, rowIndex) => {
             row.forEach((col, colIndex) => {
                 const btn = document.createElement("button");
+                btn.classList.add("cell-btn");
                 btn.dataset.row = rowIndex;
                 btn.dataset.col = colIndex;
                 btn.textContent = col;

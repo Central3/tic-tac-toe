@@ -33,6 +33,25 @@ h6 {
 
 body {
     font-family: sans-serif;
+    color: #4ade80;
+}
+
+/* font style */
+@font-face {
+    font-family: 'Pinmold';
+    src: url('transfonter.org-20240313-110525/PinmoldDEMO.eot');
+    /* IE9+ Compat Modes */
+    src: url('transfonter.org-20240313-110525/PinmoldDEMO.woff2') format('woff2'),
+        /* Super modern browsers */
+        url('transfonter.org-20240313-110525/PinmoldDEMO.woff') format('woff'),
+        /* Modern browsers */
+        url('transfonter.org-20240313-110525/PinmoldDEMO.ttf') format('truetype'),
+        /* Safari, Android, iOS */
+}
+
+body {
+    font-family: Pinmold;
+    background-color: #d9f99d;
 }
 
 /* Board style */
@@ -48,4 +67,34 @@ body {
     grid-template-rows: repeat(3, 1fr);
     height: 300px;
     width: 300px;
+}
+
+/* other styles */
+.start-btn {
+    background-color: #4ade80;
+    padding: 4px 32px;
+    font-size: 1.2rem;
+    border: none;
+    transition-duration: 0.4s;
+    display: block;
+    margin: 16px auto;
+    color: #fff;
+}
+
+.start-btn:hover {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.cell-btn {
+    font-size: 2.5rem;
+}
+
+.display-result {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 12px;
 }
