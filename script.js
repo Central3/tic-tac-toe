@@ -128,7 +128,12 @@ function GameController() {
         return 0;
     };
 
-    return { getActivePlayer, play, getBoard: board.getBoard, checkWin };
+    return {
+        getActivePlayer,
+        play,
+        getBoard: board.getBoard,
+        checkWin,
+    };
 }
 
 // Handle everything that happens in the interface
@@ -138,19 +143,39 @@ function GameController() {
     const dispalyResult = document.querySelector(".display-result");
     const restartBtn = document.querySelector(".restart-btn");
 
+    // Audio
+    const popSound = new Audio("sounds/happy-pop-2.mp3");
+    const bgMusic = new Audio("sounds/game-music-loop.mp3");
+    const winMusic = new Audio("sounds/success-1.mp3");
+    const drawMusic = new Audio("sounds/error-2.mp3");
+
     const game = GameController();
+    const board = game.getBoard();
 
     const updateScreen = () => {
-        const board = game.getBoard();
+        bgMusic.play();
+        bgMusic.loop = true;
+
         let winStatus = "";
         boardDiv.textContent = "";
 
         const activePlayer = game.getActivePlayer();
 
-        if (game.checkWin(board) === 1) winStatus = "Player 1 won";
-        else if (game.checkWin(board) === 2) winStatus = "Player 2 won";
-        else if (game.checkWin(board) === 0) winStatus = "It's a draw";
-        else winStatus = `${activePlayer.name}'s turn`;
+        if (game.checkWin(board) === 1) {
+            bgMusic.pause();
+            winMusic.play();
+            winStatus = "Player 1 won";
+        } else if (game.checkWin(board) === 2) {
+            bgMusic.pause();
+            winMusic.play();
+            winStatus = "Player 2 won";
+        } else if (game.checkWin(board) === 0) {
+            bgMusic.pause();
+            drawMusic.play();
+            winStatus = "It's a draw";
+        } else {
+            winStatus = `${activePlayer.name}'s turn`;
+        }
 
         dispalyResult.textContent = winStatus;
 
@@ -171,6 +196,9 @@ function GameController() {
             const cellRow = event.target.dataset.row;
             const cellCol = event.target.dataset.col;
 
+            popSound.currentTime = 0;
+            popSound.play();
+
             game.play(cellRow, cellCol);
         }
 
@@ -178,7 +206,13 @@ function GameController() {
     }
 
     function handleRestartClick() {
-        location.reload();
+        board.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+                board[rowIndex][colIndex] = "";
+            });
+        });
+
+        updateScreen();
     }
 
     boardDiv.addEventListener("click", handleBoardClick);
