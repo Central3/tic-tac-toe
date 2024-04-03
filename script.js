@@ -133,6 +133,7 @@ function GameController() {
         play,
         getBoard: board.getBoard,
         checkWin,
+        switchPlayer
     };
 }
 
@@ -212,6 +213,7 @@ function GameController() {
             });
         });
 
+        if (game.getActivePlayer().marker === "O") game.switchPlayer();
         updateScreen();
     }
 
