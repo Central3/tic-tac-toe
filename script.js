@@ -30,6 +30,20 @@ function GameBoard() {
     return { getBoard, markCell, printBoard };
 }
 
+function AIController(name, marker, board) {
+    const makeMove = () => {
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                if (board[row][col] === "") return { row, col };
+            }
+        }
+
+        return null;
+    };
+
+    return { name, marker, makeMove };
+}
+
 /* 
     Handles all the gamplay logic
 */
@@ -41,10 +55,7 @@ function GameController() {
         marker: "X",
     };
 
-    const player2 = {
-        name: "Player Two",
-        marker: "O",
-    };
+    const player2 = AIController("Player Two", "O", board.getBoard());
 
     let activePlayer = player1;
 
@@ -54,11 +65,28 @@ function GameController() {
         (activePlayer = activePlayer === player1 ? player2 : player1);
 
     const play = (row, col) => {
-        const winStatus = checkWin(board.getBoard());
+        let winStatus = checkWin(board.getBoard());
 
         if (winStatus !== 1 && winStatus !== 2 && winStatus !== 0) {
             if (board.markCell(row, col, activePlayer.marker) != -1) {
                 switchPlayer();
+
+                winStatus = checkWin(board.getBoard());
+
+                if (winStatus !== 1 && winStatus !== 2 && winStatus !== 0) {
+                    if (activePlayer.marker === "O") {
+                        player2Move = player2.makeMove();
+                        if (player2Move !== null) {
+                            board.markCell(
+                                player2Move.row,
+                                player2Move.col,
+                                player2.marker
+                            );
+
+                            switchPlayer();
+                        }
+                    }
+                }
             }
         }
 
@@ -133,7 +161,7 @@ function GameController() {
         play,
         getBoard: board.getBoard,
         checkWin,
-        switchPlayer
+        switchPlayer,
     };
 }
 
@@ -165,11 +193,11 @@ function GameController() {
         if (game.checkWin(board) === 1) {
             bgMusic.pause();
             winMusic.play();
-            winStatus = "Player 1 won";
+            winStatus = "Player One won";
         } else if (game.checkWin(board) === 2) {
             bgMusic.pause();
             winMusic.play();
-            winStatus = "Player 2 won";
+            winStatus = "Player Two won";
         } else if (game.checkWin(board) === 0) {
             bgMusic.pause();
             drawMusic.play();
